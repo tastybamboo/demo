@@ -10,13 +10,6 @@ Panda::Core.configure do |config|
       client_id: ENV["GITHUB_CLIENT_ID"] || Rails.application.credentials.dig(:github, :client_id),
       client_secret: ENV["GITHUB_CLIENT_SECRET"] || Rails.application.credentials.dig(:github, :client_secret),
       auto_provision: true
-    },
-    google: {
-      enabled: true,
-      name: "Google",
-      client_id: ENV["GOOGLE_CLIENT_ID"] || Rails.application.credentials.dig(:google, :client_id),
-      client_secret: ENV["GOOGLE_CLIENT_SECRET"] || Rails.application.credentials.dig(:google, :client_secret),
-      auto_provision: true
     }
   }
 end

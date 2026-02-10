@@ -19,7 +19,6 @@ gem "panda-helpdesk", github: "tastybamboo/panda-helpdesk", branch: "main"
 
 # OAuth providers
 gem "omniauth-github"
-gem "omniauth-google-oauth2"
 
 # Database-backed adapters for cache, jobs, and cable
 gem "solid_cache"
