@@ -35,7 +35,8 @@ gem "tzinfo-data", platforms: %i[windows jruby]
 # Faster boot
 gem "bootsnap", require: false
 
-# HTTP asset caching/compression (used by Dockerfile CMD)
+# Deployment
+gem "kamal", require: false
 gem "thruster", require: false
 
 group :production do

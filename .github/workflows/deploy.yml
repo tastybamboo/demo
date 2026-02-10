@@ -1,0 +1,42 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 20
+
+    env:
+      DOCKER_BUILDKIT: 1
+      GIANT_KAMAL_HOST: ${{ secrets.GIANT_KAMAL_HOST }}
+      GIANT_KAMAL_REGISTRY_PASSWORD: ${{ secrets.GIANT_KAMAL_REGISTRY_PASSWORD }}
+      GIANT_RAILS_MASTER_KEY: ${{ secrets.GIANT_RAILS_MASTER_KEY }}
+      GIANT_DATABASE_URL: ${{ secrets.GIANT_DATABASE_URL }}
+      GIANT_GITHUB_CLIENT_ID: ${{ secrets.GIANT_GITHUB_CLIENT_ID }}
+      GIANT_GITHUB_CLIENT_SECRET: ${{ secrets.GIANT_GITHUB_CLIENT_SECRET }}
+      GIANT_GOOGLE_CLIENT_ID: ${{ secrets.GIANT_GOOGLE_CLIENT_ID }}
+      GIANT_GOOGLE_CLIENT_SECRET: ${{ secrets.GIANT_GOOGLE_CLIENT_SECRET }}
+      GIANT_SSH_PRIVATE_KEY: ${{ secrets.GIANT_SSH_PRIVATE_KEY }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.GIANT_SSH_PRIVATE_KEY }}
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - run: kamal deploy

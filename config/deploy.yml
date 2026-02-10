@@ -1,0 +1,36 @@
+service: panda-demo
+image: ghcr.io/tastybamboo/demo
+
+servers:
+  web:
+    hosts:
+      - <%= ENV["GIANT_KAMAL_HOST"] %>
+    options:
+      add-host: host.docker.internal:host-gateway
+
+proxy:
+  ssl: true
+  host: demo.tastybamboo.io
+  healthcheck:
+    path: /up
+
+registry:
+  server: ghcr.io
+  username: tastybamboo
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+env:
+  clear:
+    SOLID_QUEUE_IN_PUMA: "1"
+    APP_HOST: demo.tastybamboo.io
+  secret:
+    - RAILS_MASTER_KEY
+    - DATABASE_URL
+    - GITHUB_CLIENT_ID
+    - GITHUB_CLIENT_SECRET
+    - GOOGLE_CLIENT_ID
+    - GOOGLE_CLIENT_SECRET
+
+builder:
+  arch: amd64

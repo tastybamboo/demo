@@ -9,10 +9,10 @@ Rails.application.configure do
   # Cache assets for far-future expiry since they are all digest stamped.
   config.public_file_server.headers = {"cache-control" => "public, max-age=#{1.year.to_i}"}
 
-  # Active Storage: use DO Spaces in production if configured, otherwise local disk
-  config.active_storage.service = ENV["SPACES_ACCESS_KEY_ID"].present? ? :digitalocean : :local
+  # Active Storage: local disk by default, S3-compatible if configured
+  config.active_storage.service = ENV["S3_ACCESS_KEY_ID"].present? ? :s3_compatible : :local
 
-  # SSL
+  # SSL — kamal-proxy terminates TLS, so assume SSL from the proxy
   config.assume_ssl = true
   config.force_ssl = true
   config.ssl_options = {redirect: {exclude: ->(request) { request.path == "/up" }}}
@@ -53,8 +53,7 @@ Rails.application.configure do
 
   # Host authorization
   config.hosts = [
-    "demo.tastybamboo.io",
-    /.*\.ondigitalocean\.app/
+    ENV.fetch("APP_HOST", "demo.tastybamboo.io")
   ]
   config.host_authorization = {exclude: ->(request) { request.path == "/up" }}
 end
